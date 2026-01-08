@@ -16,24 +16,37 @@
   </script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
 
     body {
       min-height: 100vh;
-      background: radial-gradient(circle at top, #111 0%, #000 60%);
       color: #eaeaea;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      cursor: none; /* кастомный курсор */
     }
 
-    /* subtle noise */
+    /* 🎥 Видео фон */
+    video.bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    /* затемнение */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(0,0,0,.4), #000 70%);
+      z-index: -1;
+    }
+
+    /* шум */
     body::before {
       content: "";
       position: fixed;
@@ -41,6 +54,19 @@
       background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 0;
+    }
+
+    /* кастомный курсор */
+    .cursor {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #9aa0ff;
+      box-shadow: 0 0 12px #9aa0ff;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 999;
     }
 
     .profile {
@@ -55,10 +81,7 @@
       animation: fadeUp .8s ease forwards;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
     .avatar {
       width: 110px;
@@ -69,44 +92,15 @@
       box-shadow: 0 0 25px rgba(120,120,255,.35);
     }
 
-    h1 {
-      font-size: 2.1rem;
-      letter-spacing: .5px;
-      text-align: center;
-      margin-bottom: 6px;
-      text-shadow: 0 0 12px rgba(150,150,255,.35);
-    }
+    h1 { font-size: 2.1rem; text-align: center; margin-bottom: 6px; text-shadow: 0 0 12px rgba(150,150,255,.35); }
 
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      margin: 10px 0 12px;
-    }
+    .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 10px 0 12px; }
 
-    .badge {
-      padding: 4px 8px;
-      font-size: .72rem;
-      border-radius: 6px;
-      background: #141414;
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 0 8px rgba(0,0,0,.6);
-    }
+    .badge { padding: 4px 8px; font-size: .72rem; border-radius: 6px; background: #141414; border: 1px solid rgba(255,255,255,.08); }
 
-    .desc {
-      font-size: .9rem;
-      opacity: .85;
-      text-align: center;
-      margin-bottom: 6px;
-    }
+    .desc { font-size: .9rem; opacity: .85; text-align: center; margin-bottom: 6px; }
 
-    .links {
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .links { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
 
     .links a {
       text-decoration: none;
@@ -116,67 +110,87 @@
       border-radius: 10px;
       border: 1px solid rgba(255,255,255,.06);
       transition: .25s;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
     }
 
-    .links a:hover {
-      transform: translateY(-1px) scale(1.015);
-      box-shadow: 0 0 14px rgba(120,120,255,.35);
-      border-color: rgba(140,140,255,.4);
-    }
+    .links a:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 0 14px rgba(120,120,255,.35); }
 
-    .stats {
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      font-size: .75rem;
-      opacity: .75;
-    }
+    .stats { margin-top: 14px; display: flex; justify-content: space-between; font-size: .75rem; opacity: .75; }
 
-    .loading {
-      margin-top: 10px;
-      font-size: .75rem;
-      letter-spacing: 2px;
-      opacity: .6;
-      animation: blinkText 1.2s infinite;
-      text-align: center;
-    }
+    .loading { margin-top: 10px; font-size: .75rem; letter-spacing: 2px; opacity: .6; animation: blinkText 1.2s infinite; text-align: center; }
 
-    @keyframes blinkText {
-      0%,100% { opacity: .3; }
-      50% { opacity: .8; }
-    }
+    @keyframes blinkText { 0%,100% { opacity: .3; } 50% { opacity: .8; } }
   </style>
 </head>
 <body>
 
+  <!-- 🎥 фон видео -->
+  <video class="bg" autoplay muted loop playsinline>
+    <source src="bg.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+
+  <div class="cursor"></div>
+
   <div class="profile">
     <div class="avatar"></div>
-
     <h1>jeep</h1>
 
     <div class="badges">
       <div class="badge">Premium</div>
+      <div class="badge">Inviter</div>
+      <div class="badge">Trusted Advisor</div>
+      <div class="badge">Pioneer</div>
     </div>
 
-    <div class="desc"> optimistic kid</div>
-    <div class="desc">Russia, Samara </div>
+    <div class="desc">1337 Best HvHer Worldwide</div>
+    <div class="desc">russian legend optimistic kid</div>
+    <div class="desc">Russia, Moscow</div>
 
     <div class="links">
-      <a href="#">Steam</a>
-      <a href="#">Discord</a>
-      <a href="#">VK</a>
-      <a href="#">Telegram</a>
-      
+      <a href="/jeep">Jeep</a>
+      <a href="/spez">$$$</a>
+      <a href="/bio">Bio</a>
     </div>
 
     <div class="stats">
-      <span>Online: 0</span>
-      <span>Views: 679</span>
+      <span>Online: <b id="online">0</b></span>
+      <span>Views: <b id="views">15</b></span>
     </div>
 
     <div class="loading">LOADING...</div>
   </div>
+
+  <!-- 🔊 hover звук + счётчики + курсор -->
+  <audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
+
+  <script>
+    // hover sound
+    document.querySelectorAll('a').forEach(a => {
+      a.addEventListener('mouseenter', () => {
+        const s = document.getElementById('hoverSound');
+        s.currentTime = 0; s.play();
+      });
+    });
+
+    // views counter
+    let views = 679;
+    setInterval(() => {
+      views += Math.random() < 0.3 ? 1 : 0;
+      document.getElementById('views').textContent = views;
+    }, 1500);
+
+    // online random
+    setInterval(() => {
+      document.getElementById('online').textContent = Math.floor(Math.random()*3);
+    }, 3000);
+
+    // кастомный курсор
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  </script>
 
 </body>
 </html>
