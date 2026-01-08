@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>jeep</title>
 
-  <!-- 💲 Cheаt-style мигающий title -->
   <script>
     const base = "jeep";
     let blink = true;
@@ -16,217 +15,43 @@
   </script>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+    body{min-height:100vh;color:#eaeaea;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:none}
 
-    body {
-      min-height: 100vh;
-      color: #eaeaea;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      cursor: none; /* кастомный курсор */
-    }
+    video.bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+    .overlay{position:fixed;inset:0;background:radial-gradient(circle at top,rgba(0,0,0,.4),#000 70%);z-index:-1}
 
-    /* 🎥 Видео фон */
-    video.bg {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
-    }
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")}
 
-    /* затемнение */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at top, rgba(0,0,0,.4), #000 70%);
-      z-index: -1;
-    }
+    .cursor{position:fixed;width:12px;height:12px;border-radius:50%;background:#9aa0ff;box-shadow:0 0 12px #9aa0ff;pointer-events:none;transform:translate(-50%,-50%);z-index:10000}
 
-    /* шум */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-    }
+    .profile{position:relative;z-index:1;width:360px;padding:28px 24px;background:rgba(15,15,15,.75);backdrop-filter:blur(10px);border-radius:18px;box-shadow:0 0 25px rgba(0,0,0,.6)}
 
-    /* кастомный курсор */
-    .cursor {
-      position: fixed;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #9aa0ff;
-      box-shadow: 0 0 12px #9aa0ff;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      z-index: 999;
-    }
+    .avatar{width:110px;height:110px;margin:0 auto 14px;border-radius:50%;background:#222 url('avatar.jpg') center/cover no-repeat;box-shadow:0 0 25px rgba(120,120,255,.35);transition:transform .15s ease-out;will-change:transform}
 
-    .profile {
-      position: relative;
-      z-index: 1;
-      width: 360px;
-      padding: 28px 24px 26px;
-      background: rgba(15,15,15,0.75);
-      backdrop-filter: blur(10px);
-      border-radius: 18px;
-      box-shadow: 0 0 25px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.04);
-      animation: fadeUp .8s ease forwards;
-    }
+    h1{text-align:center;margin-bottom:6px}
+    .desc{text-align:center;opacity:.85;margin-bottom:6px}
 
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .links{margin-top:14px;display:flex;justify-content:center;gap:14px}
+.links .icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:linear-gradient(180deg,#151515,#0e0e0e);border:1px solid rgba(255,255,255,.08);transition:.25s}
+.links .icon svg{width:22px;height:22px;fill:#eaeaea;opacity:.85;transition:.25s}
+.links .icon:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 0 18px rgba(120,120,255,.45)}
+.links .icon:hover svg{opacity:1}
+    .links .icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:#111;border:1px solid rgba(255,255,255,.08)}
 
-    .avatar {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 14px;
-      border-radius: 50%;
-      background: #222 url('avatar.jpg') center/cover no-repeat;
-      box-shadow: 0 0 25px rgba(120,120,255,.35);
-      transition: transform .15s ease-out, box-shadow .35s ease, filter .35s ease;
-      position: relative;
-      will-change: transform;
-    }
+    .stats{margin-top:14px;display:flex;justify-content:space-between;font-size:.75rem;opacity:.75}
 
-    .avatar::after {
-      content: "";
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(150,150,255,.6), transparent 70%);
-      opacity: 0;
-      transition: opacity .35s ease;
-      pointer-events: none;
-    }
-
-    .avatar:hover {
-      transform: scale(1.08) rotate(1deg);
-      box-shadow: 0 0 45px rgba(150,150,255,.75);
-      filter: brightness(1.1);
-    }
-
-    .avatar:hover::after {
-      opacity: 1;
-    }
-
-    h1 { font-size: 2.1rem; text-align: center; margin-bottom: 6px; text-shadow: 0 0 12px rgba(150,150,255,.35); }
-
-    .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 10px 0 12px; }
-
-    .badge { padding: 4px 8px; font-size: .72rem; border-radius: 6px; background: #141414; border: 1px solid rgba(255,255,255,.08); }
-
-    .desc { font-size: .9rem; opacity: .85; text-align: center; margin-bottom: 6px; }
-
-    .links { margin-top: 14px; display: flex; justify-content: center; gap: 14px; }
-
-    .links.icons .icon {
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      background: linear-gradient(180deg,#151515,#0e0e0e);
-      border: 1px solid rgba(255,255,255,.08);
-      transition: .25s;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
-    }
-
-    .links.icons .icon svg {
-      width: 22px;
-      height: 22px;
-      fill: #eaeaea;
-      opacity: .85;
-      transition: .25s;
-    }
-
-    .links.icons .icon:hover {
-      transform: translateY(-2px) scale(1.08);
-      box-shadow: 0 0 18px rgba(120,120,255,.45);
-    }
-
-    .links.icons .icon:hover svg { opacity: 1; }
-
-    .icon.vk:hover { box-shadow: 0 0 18px rgba(0,119,255,.6); }
-    .icon.tg:hover { box-shadow: 0 0 18px rgba(0,170,255,.6); }
-    .icon.dc:hover { box-shadow: 0 0 18px rgba(88,101,242,.6); }
-
-    .links a {
-      text-decoration: none;
-      color: #eaeaea;
-      padding: 10px 14px;
-      background: linear-gradient(180deg,#151515,#0e0e0e);
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.06);
-      transition: .25s;
-    }
-
-    .links a:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 0 14px rgba(120,120,255,.35); }
-
-    .stats { margin-top: 14px; display: flex; justify-content: space-between; font-size: .75rem; opacity: .75; }
-
-    
-
-    @keyframes blinkText { 0%,100% { opacity: .3; } 50% { opacity: .8; } }
-
-/* 🔐 ENTER SCREEN */
-.enter-screen{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#000;
-  cursor:pointer;
-  transition: opacity .8s ease, backdrop-filter .8s ease;
-}
-
-.enter-inner{
-  text-align:center;
-  transition: transform .8s cubic-bezier(.2,.8,.2,1), opacity .8s ease;
-}
-
-.enter-title{
-  font-size:26px;
-  letter-spacing:4px;
-  margin-bottom:12px;
-  text-shadow:0 0 20px #9aa0ff;
-  animation: enterPulse 2.2s ease-in-out infinite;
-}
-
-.enter-sub{
-  font-size:12px;
-  opacity:.6;
-  letter-spacing:2px;
-}
-
-.enter-screen.hide{
-  opacity:0;
-  backdrop-filter: blur(18px);
-}
-
-.enter-screen.hide .enter-inner{
-  opacity:0;
-  transform: scale(1.12);
-}
-
-@keyframes enterPulse{
-  0%,100%{ opacity:.65; transform:scale(1) }
-  50%{ opacity:1; transform:scale(1.06) }
-} 50% { opacity: .8; } }
+    /* 🔐 ENTER SCREEN — FIXED */
+    .enter-screen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#000;cursor:pointer}
+    .enter-inner{text-align:center;transition:.9s}
+    .enter-title{font-size:26px;letter-spacing:4px;margin-bottom:12px;text-shadow:0 0 20px #9aa0ff}
+    .enter-sub{font-size:12px;opacity:.6;letter-spacing:2px}
+    .enter-screen.hide{opacity:0;pointer-events:none}
   </style>
 </head>
 <body>
 
-  <!-- 🔐 ENTER SCREEN -->
+  <!-- 🔐 CLICK TO ENTER -->
   <div id="enter" class="enter-screen">
     <div class="enter-inner">
       <div class="enter-title">CLICK TO ENTER</div>
@@ -234,43 +59,28 @@
     </div>
   </div>
 
-<div style="font-size:12px;opacity:.6;letter-spacing:2px;">PRIVATE BIO</div>
-  </div>
-
-  <!-- 🎥 фон видео -->
-  <video class="bg" autoplay muted loop playsinline id="bgVideo">
+  <video class="bg" id="bgVideo" autoplay muted loop playsinline>
     <source src="bg.mp4" type="video/mp4">
   </video>
   <div class="overlay"></div>
-
-  <!-- кнопка включения звука -->
-  <div id="unmute" style="position:fixed;bottom:20px;right:20px;z-index:10;padding:10px 14px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);border-radius:10px;font-size:12px;cursor:pointer;backdrop-filter:blur(6px);">🔊 Enable sound</div>
 
   <div class="cursor"></div>
 
   <div class="profile">
     <div class="avatar"></div>
     <h1>jeep</h1>
-
-    <div class="badges">
-      <div class="badge">Premium</div>
-      <div class="badge">Inviter</div>
-      <div class="badge">Trusted Advisor</div>
-      <div class="badge">Pioneer</div>
-    </div>
-
     <div class="desc">kinglowtab</div>
     <div class="desc">Russia, Samara</div>
 
-    <div class="links icons">
-      <a href="https://vk.com" target="_blank" class="icon vk" aria-label="VK">
-        <svg viewBox="0 0 24 24"><path d="M12.784 18.984c-6.36 0-9.984-4.344-10.128-11.568h3.192c.096 5.28 2.448 7.512 4.296 7.968V7.416h3v4.536c1.824-.192 3.744-2.256 4.392-4.536h3c-.504 2.88-2.592 4.944-4.08 5.784 1.488.672 3.864 2.448 4.608 5.784h-3.312c-.576-1.92-2.016-3.408-4.608-3.6v3.6h-.36z"/></svg>
+    <div class="links">
+      <a href="https://vk.com" target="_blank" class="icon" aria-label="VK">
+        <svg viewBox="0 0 24 24"><path d="M12.02 0C5.39 0 0 5.38 0 12s5.39 12 12.02 12C18.63 24 24 18.62 24 12S18.63 0 12.02 0zm5.73 17.45h-1.62c-.61 0-.8-.48-1.9-1.56-.96-.93-1.38-1.05-1.62-1.05-.34 0-.44.1-.44.57v1.43c0 .38-.12.61-1.11.61-1.65 0-3.48-1-4.76-2.86-1.92-2.69-2.44-4.71-2.44-5.13 0-.23.08-.44.51-.44h1.62c.41 0 .57.19.73.64.81 2.32 2.17 4.35 2.73 4.35.21 0 .3-.1.3-.64V9.4c-.07-1.17-.69-1.27-.69-1.69 0-.21.17-.41.44-.41h2.55c.34 0 .46.17.46.55v3.53c0 .38.17.51.29.51.21 0 .39-.13.78-.51 1.2-1.35 2.06-3.44 2.06-3.44.11-.23.3-.44.71-.44h1.62c.48 0 .58.25.48.55-.18.86-2.02 3.44-2.05 3.48-.17.27-.24.38 0 .69.17.23.73.72 1.11 1.17.7.8 1.24 1.47 1.38 1.93.12.46-.09.69-.55.69z"/></svg>
       </a>
-      <a href="https://t.me" target="_blank" class="icon tg" aria-label="Telegram">
-        <svg viewBox="0 0 24 24"><path d="M9.993 15.57 9.7 19.8c.426 0 .612-.18.834-.402l2.004-1.926 4.146 3.03c.762.42 1.302.204 1.5-.702l2.718-12.756h.002c.234-1.086-.39-1.512-1.128-1.23L3.06 9.216c-1.062.42-1.044 1.02-.192 1.284l4.374 1.368L17.46 5.82c.48-.318.918-.144.558.174"/></svg>
+      <a href="https://t.me" target="_blank" class="icon" aria-label="Telegram">
+        <svg viewBox="0 0 24 24"><path d="M9.04 15.47l-.39 5.53c.56 0 .8-.24 1.1-.53l2.64-2.5 5.47 4c1 .55 1.72.26 1.97-.92l3.57-16.8h.01c.29-1.36-.49-1.89-1.46-1.53L1.3 9.38c-1.32.52-1.3 1.27-.24 1.6l5.9 1.84L19.7 5.7c.6-.39 1.15-.17.7.22"/></svg>
       </a>
-      <a href="https://discord.gg" target="_blank" class="icon dc" aria-label="Discord">
-        <svg viewBox="0 0 24 24"><path d="M20.317 4.369a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.211.375-.444.864-.608 1.249-1.845-.276-3.68-.276-5.486 0-.164-.385-.405-.874-.617-1.249a.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.027c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.105c-.652-.247-1.273-.549-1.872-.892a.077.077 0 0 1-.008-.127c.126-.094.252-.192.371-.291a.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.01c.12.099.246.197.372.291a.077.077 0 0 1-.006.127 12.298 12.298 0 0 1-1.873.892.077.077 0 0 0-.04.106c.36.699.771 1.364 1.225 1.994a.076.076 0 0 0 .084.028 19.876 19.876 0 0 0 6.002-3.03.077.077 0 0 0 .031-.057c.5-5.177-.838-9.673-3.548-13.661a.061.061 0 0 0-.031-.028"/></svg>
+      <a href="https://discord.gg/QjAgEwZ4VZ" target="_blank" class="icon" aria-label="Discord">
+        <svg viewBox="0 0 24 24"><path d="M20.32 4.37A19.79 19.79 0 0015.89 3a13.8 13.8 0 00-.7 1.45 18.38 18.38 0 00-5.38 0A13.8 13.8 0 009.1 3a19.79 19.79 0 00-4.43 1.37C1.9 8.44 1.5 12.43 1.7 16.37a19.9 19.9 0 005.99 3.02c.49-.66.92-1.37 1.3-2.11-.72-.27-1.41-.6-2.07-.98.17-.13.33-.27.49-.4a14.27 14.27 0 0012.2 0c.16.13.32.27.49.4-.66.38-1.35.71-2.07.98.38.74.82 1.45 1.3 2.11a19.9 19.9 0 005.99-3.02c.26-4.3-.61-8.26-3.27-11.99zM8.02 14.68c-.86 0-1.56-.8-1.56-1.78 0-.98.69-1.78 1.56-1.78.88 0 1.58.8 1.56 1.78 0 .98-.69 1.78-1.56 1.78zm7.96 0c-.86 0-1.56-.8-1.56-1.78 0-.98.69-1.78 1.56-1.78.88 0 1.58.8 1.56 1.78 0 .98-.69 1.78-1.56 1.78z"/></svg>
       </a>
     </div>
 
@@ -278,83 +88,41 @@
       <span>Online: <b id="online">0</b></span>
       <span>Views: <b id="views">0</b></span>
     </div>
-
-    
   </div>
 
-  <!-- 🔊 hover звук + счётчики + курсор -->
-  <audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
-
   <script>
-    // hover sound
-    document.querySelectorAll('a').forEach(a => {
-      a.addEventListener('mouseenter', () => {
-        const s = document.getElementById('hoverSound');
-        s.currentTime = 0; s.play();
-      });
-    });
-
-    // views counter
-    let views = 0;
-    setInterval(() => {
-      views += Math.random() < 0.3 ? 1 : 0;
-      document.getElementById('views').textContent = views;
-    }, 1500);
-
-    // online random
-    setInterval(() => {
-      document.getElementById('online').textContent = Math.floor(Math.random()*3);
-    }, 3000);
-
-    // 🔐 enter-screen логика (FIXED)
+    // 🔐 CLICK TO ENTER — WORKING
     const enter = document.getElementById('enter');
     const video = document.getElementById('bgVideo');
 
     enter.addEventListener('click', () => {
       enter.classList.add('hide');
-      setTimeout(() => enter.remove(), 850);
+      setTimeout(() => enter.remove(), 900);
       video.muted = false;
       video.volume = 0.4;
       video.play();
     });
-    });
 
-    // включение звука видео по клику
-    const video = document.getElementById('bgVideo');
-    const btn = document.getElementById('unmute');
-    btn.addEventListener('click', () => {
-      video.muted = false;
-      video.volume = 0.4;
-      video.play();
-      btn.remove();
-    });
-
-    // кастомный курсор
+    // cursor
     const cursor = document.querySelector('.cursor');
     document.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
 
-    // 🎯 avatar follow cursor (parallax)
+    // counters
+    let views = 0;
+    setInterval(()=>{views++;document.getElementById('views').textContent=views},2000);
+    setInterval(()=>{document.getElementById('online').textContent=Math.floor(Math.random()*3)},3000);
+
+    // avatar follow
     const avatar = document.querySelector('.avatar');
-    const strength = 10; // сила поворота
-
     document.addEventListener('mousemove', e => {
-      const rect = avatar.getBoundingClientRect();
-      const avatarX = rect.left + rect.width / 2;
-      const avatarY = rect.top + rect.height / 2;
-
-      const deltaX = (e.clientX - avatarX) / rect.width;
-      const deltaY = (e.clientY - avatarY) / rect.height;
-
-      const rotateY = deltaX * strength;
-      const rotateX = -deltaY * strength;
-
-      avatar.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+      const r = avatar.getBoundingClientRect();
+      const dx = (e.clientX - (r.left+r.width/2))/r.width;
+      const dy = (e.clientY - (r.top+r.height/2))/r.height;
+      avatar.style.transform = `perspective(600px) rotateX(${-dy*10}deg) rotateY(${dx*10}deg)`;
     });
-
-    avatar.addEventListener('mouseleave', () => {
-      avatar.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)';
-    });
-
+  </script>
+</body>
+</html>
