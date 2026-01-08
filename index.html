@@ -252,14 +252,42 @@
       volumeBtn.style.opacity = isMuted ? 1 : .35;
     });
 
-    // avatar follow
+    // avatar follow (desktop + mobile gyro)
     const avatar = document.querySelector('.avatar');
+    const MAX_OFFSET = 8;
+
+    // desktop mouse
     document.addEventListener('mousemove', e => {
       const r = avatar.getBoundingClientRect();
-      const dx = (e.clientX - (r.left+r.width/2))/r.width;
-      const dy = (e.clientY - (r.top+r.height/2))/r.height;
-      avatar.style.transform = `perspective(600px) rotateX(${-dy*10}deg) rotateY(${dx*10}deg)`;
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const dx = (e.clientX - cx) / r.width;
+      const dy = (e.clientY - cy) / r.height;
+      avatar.style.transform = `translate(${dx * MAX_OFFSET}px, ${dy * MAX_OFFSET}px)`;
     });
+
+    // mobile accelerometer / gyroscope
+    function handleOrientation(e){
+      const gx = e.gamma || 0; // left/right
+      const gy = e.beta || 0;  // front/back
+      const dx = Math.max(-MAX_OFFSET, Math.min(MAX_OFFSET, gx / 10));
+      const dy = Math.max(-MAX_OFFSET, Math.min(MAX_OFFSET, gy / 15));
+      avatar.style.transform = `translate(${dx}px, ${dy}px)`;
+    }
+
+    if(window.DeviceOrientationEvent){
+      if(typeof DeviceOrientationEvent.requestPermission === 'function'){
+        document.body.addEventListener('click', () => {
+          DeviceOrientationEvent.requestPermission().then(p => {
+            if(p === 'granted'){
+              window.addEventListener('deviceorientation', handleOrientation);
+            }
+          }).catch(()=>{});
+        }, { once:true });
+      } else {
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+    }
       
     // ❄️ generate purple snow
     const snow = document.getElementById('snow');
