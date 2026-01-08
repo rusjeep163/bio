@@ -123,11 +123,20 @@
 </head>
 <body>
 
+  <!-- 🔐 ENTER SCREEN -->
+  <div id="enter" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#000;cursor:pointer;">
+    <div style="font-size:26px;letter-spacing:4px;margin-bottom:12px;text-shadow:0 0 20px #9aa0ff;">CLICK TO ENTER</div>
+    <div style="font-size:12px;opacity:.6;letter-spacing:2px;">PRIVATE BIO</div>
+  </div>
+
   <!-- 🎥 фон видео -->
-  <video class="bg" autoplay muted loop playsinline>
+  <video class="bg" autoplay muted loop playsinline id="bgVideo">
     <source src="bg.mp4" type="video/mp4">
   </video>
   <div class="overlay"></div>
+
+  <!-- кнопка включения звука -->
+  <div id="unmute" style="position:fixed;bottom:20px;right:20px;z-index:10;padding:10px 14px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);border-radius:10px;font-size:12px;cursor:pointer;backdrop-filter:blur(6px);">🔊 Enable sound</div>
 
   <div class="cursor"></div>
 
@@ -136,25 +145,24 @@
     <h1>jeep</h1>
 
     <div class="badges">
-      <div class="badge">Premium</div>
-      <div class="badge">Inviter</div>
-      <div class="badge">Trusted Advisor</div>
-      <div class="badge">Pioneer</div>
+
+      <div class="badge">Patriot
+      </div>
     </div>
 
-    <div class="desc">1337 Best HvHer Worldwide</div>
-    <div class="desc">russian legend optimistic kid</div>
-    <div class="desc">Russia, Moscow</div>
+    <div class="desc"> css </div>
+    <div class="desc">russian legend depressive kid</div>
+    <div class="desc">Russia,Samara</div>
 
     <div class="links">
       <a href="/jeep">Jeep</a>
-      <a href="/spez">$$$</a>
+      <a href="/spez">Spez</a>
       <a href="/bio">Bio</a>
     </div>
 
     <div class="stats">
       <span>Online: <b id="online">0</b></span>
-      <span>Views: <b id="views">15</b></span>
+      <span>Views: <b id="views">679</b></span>
     </div>
 
     <div class="loading">LOADING...</div>
@@ -183,6 +191,26 @@
     setInterval(() => {
       document.getElementById('online').textContent = Math.floor(Math.random()*3);
     }, 3000);
+
+    // 🔐 enter-screen логика
+    const enter = document.getElementById('enter');
+    enter.addEventListener('click', () => {
+      enter.style.opacity = '0';
+      setTimeout(() => enter.remove(), 400);
+      video.muted = false;
+      video.volume = 0.4;
+      video.play();
+    });
+
+    // включение звука видео по клику
+    const video = document.getElementById('bgVideo');
+    const btn = document.getElementById('unmute');
+    btn.addEventListener('click', () => {
+      video.muted = false;
+      video.volume = 0.4;
+      video.play();
+      btn.remove();
+    });
 
     // кастомный курсор
     const cursor = document.querySelector('.cursor');
