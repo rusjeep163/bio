@@ -3,15 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jeep</title>
+  <title>🩸 jeep</title>
 
   <script>
-    const base = "jeep";
-    let blink = true;
+    // animated title with blood drop emoji
+    const baseTitle = 'jeep';
+    const frames = [
+      '🩸  ' + baseTitle,
+      baseTitle + '  🩸',
+      '🩸🩸  ' + baseTitle,
+      baseTitle + '  🩸🩸'
+    ];
+    let i = 0;
     setInterval(() => {
-      document.title = blink ? `$ ${base} $` : `  ${base}  `;
-      blink = !blink;
-    }, 420);
+      document.title = frames[i % frames.length];
+      i++;
+    }, 500);
   </script>
 
   <style>
@@ -20,6 +27,12 @@
 
     video.bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
     .overlay{position:fixed;inset:0;background:radial-gradient(circle at top,rgba(0,0,0,.4),#000 70%);z-index:-1}
+
+/* volume slider */
+.volume-wrap{position:fixed;right:22px;bottom:22px;z-index:5}
+#volumeRange{-webkit-appearance:none;width:120px;height:4px;background:rgba(255,255,255,.15);border-radius:4px;outline:none;cursor:pointer}
+#volumeRange::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#9aa0ff;box-shadow:0 0 12px rgba(154,160,255,.8)}
+#volumeRange::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#9aa0ff;box-shadow:0 0 12px rgba(154,160,255,.8)}
 
     body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")}
 
@@ -32,10 +45,33 @@
     h1{text-align:center;margin-bottom:6px}
     .desc{text-align:center;opacity:.85;margin-bottom:6px}
 
+    .badges{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
+    
+    /* badges appear animation */
+    .badge{
+      opacity:0;
+      transform:translateY(8px);
+      animation:badgeIn .6s ease forwards;
+    }
+    .badge:nth-child(1){animation-delay:.15s}
+    .badge:nth-child(2){animation-delay:.3s}
+
+    @keyframes badgeIn{
+      to{opacity:1;transform:translateY(0)}
+    }
+    .badge{font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);text-transform:uppercase;letter-spacing:.5px;box-shadow:0 0 10px rgba(154,160,255,.25);transition:.25s}
+    .badge:hover{box-shadow:0 0 14px rgba(154,160,255,.6)}
+
     .links{margin-top:14px;display:flex;justify-content:center;gap:14px}
 .links .icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:linear-gradient(180deg,#151515,#0e0e0e);border:1px solid rgba(255,255,255,.08);transition:.25s}
 .links .icon svg{width:22px;height:22px;fill:#eaeaea;opacity:.85;transition:.25s}
-.links .icon:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 0 18px rgba(120,120,255,.45)}
+.links .icon:hover{
+  transform:translateY(-2px) scale(1.08);
+  box-shadow:0 0 14px rgba(154,160,255,.45),0 0 32px rgba(154,160,255,.25);
+}
+.links .icon:hover svg{opacity:1;filter:drop-shadow(0 0 6px rgba(154,160,255,.8));}
+
+
 .links .icon:hover svg{opacity:1}
     .links .icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:#111;border:1px solid rgba(255,255,255,.08)}
 
@@ -64,29 +100,39 @@
   </video>
   <div class="overlay"></div>
 
+  <!-- volume slider -->
+  <div class="volume-wrap">
+    <input type="range" id="volumeRange" min="0" max="100" value="35" />
+  </div>
+
   <div class="cursor"></div>
 
   <div class="profile">
     <div class="avatar"></div>
+    <div class="badges">
+      <span class="badge">musiclover</span>
+      <span class="badge">css creator</span>
+    </div>
     <h1>jeep</h1>
     <div class="desc">kinglowtab</div>
     <div class="desc">Russia, Samara</div>
 
     <div class="links">
-      <a href="https://vk.com" target="_blank" class="icon" aria-label="VK">
+      <a href="https://vk.com/iglamurov" target="_blank" class="icon" aria-label="VK">
         <svg viewBox="0 0 24 24"><path d="M12.02 0C5.39 0 0 5.38 0 12s5.39 12 12.02 12C18.63 24 24 18.62 24 12S18.63 0 12.02 0zm5.73 17.45h-1.62c-.61 0-.8-.48-1.9-1.56-.96-.93-1.38-1.05-1.62-1.05-.34 0-.44.1-.44.57v1.43c0 .38-.12.61-1.11.61-1.65 0-3.48-1-4.76-2.86-1.92-2.69-2.44-4.71-2.44-5.13 0-.23.08-.44.51-.44h1.62c.41 0 .57.19.73.64.81 2.32 2.17 4.35 2.73 4.35.21 0 .3-.1.3-.64V9.4c-.07-1.17-.69-1.27-.69-1.69 0-.21.17-.41.44-.41h2.55c.34 0 .46.17.46.55v3.53c0 .38.17.51.29.51.21 0 .39-.13.78-.51 1.2-1.35 2.06-3.44 2.06-3.44.11-.23.3-.44.71-.44h1.62c.48 0 .58.25.48.55-.18.86-2.02 3.44-2.05 3.48-.17.27-.24.38 0 .69.17.23.73.72 1.11 1.17.7.8 1.24 1.47 1.38 1.93.12.46-.09.69-.55.69z"/></svg>
       </a>
-      <a href="https://t.me" target="_blank" class="icon" aria-label="Telegram">
+      <a href="https://t.me/russianjeep" target="_blank" class="icon" aria-label="Telegram">
         <svg viewBox="0 0 24 24"><path d="M9.04 15.47l-.39 5.53c.56 0 .8-.24 1.1-.53l2.64-2.5 5.47 4c1 .55 1.72.26 1.97-.92l3.57-16.8h.01c.29-1.36-.49-1.89-1.46-1.53L1.3 9.38c-1.32.52-1.3 1.27-.24 1.6l5.9 1.84L19.7 5.7c.6-.39 1.15-.17.7.22"/></svg>
       </a>
       <a href="https://discord.gg/QjAgEwZ4VZ" target="_blank" class="icon" aria-label="Discord">
         <svg viewBox="0 0 24 24"><path d="M20.32 4.37A19.79 19.79 0 0015.89 3a13.8 13.8 0 00-.7 1.45 18.38 18.38 0 00-5.38 0A13.8 13.8 0 009.1 3a19.79 19.79 0 00-4.43 1.37C1.9 8.44 1.5 12.43 1.7 16.37a19.9 19.9 0 005.99 3.02c.49-.66.92-1.37 1.3-2.11-.72-.27-1.41-.6-2.07-.98.17-.13.33-.27.49-.4a14.27 14.27 0 0012.2 0c.16.13.32.27.49.4-.66.38-1.35.71-2.07.98.38.74.82 1.45 1.3 2.11a19.9 19.9 0 005.99-3.02c.26-4.3-.61-8.26-3.27-11.99zM8.02 14.68c-.86 0-1.56-.8-1.56-1.78 0-.98.69-1.78 1.56-1.78.88 0 1.58.8 1.56 1.78 0 .98-.69 1.78-1.56 1.78zm7.96 0c-.86 0-1.56-.8-1.56-1.78 0-.98.69-1.78 1.56-1.78.88 0 1.58.8 1.56 1.78 0 .98-.69 1.78-1.56 1.78z"/></svg>
       </a>
+      
     </div>
 
     <div class="stats">
       <span>Online: <b id="online">0</b></span>
-      <span>Views: <b id="views">0</b></span>
+      <span>Unique: <b id="unique">0</b></span>
     </div>
   </div>
 
@@ -99,7 +145,7 @@
       enter.classList.add('hide');
       setTimeout(() => enter.remove(), 900);
       video.muted = false;
-      video.volume = 0.4;
+      video.volume = 0.35;
       video.play();
     });
 
@@ -111,9 +157,52 @@
     });
 
     // counters
-    let views = 0;
-    setInterval(()=>{views++;document.getElementById('views').textContent=views},2000);
+    // online (fake small activity)
+    setInterval(()=>{
+      document.getElementById('online').textContent = Math.floor(Math.random()*3);
+    },3000);
+
+    // unique visitors (once per browser)
+    const UNIQUE_KEY = 'jeep_unique_visited';
+    let unique = Number(localStorage.getItem('jeep_unique_count') || 0);
+
+    if(!localStorage.getItem(UNIQUE_KEY)){
+      unique++;
+      localStorage.setItem(UNIQUE_KEY,'1');
+      localStorage.setItem('jeep_unique_count', unique);
+    }
+
+    document.getElementById('unique').textContent = unique;
     setInterval(()=>{document.getElementById('online').textContent=Math.floor(Math.random()*3)},3000);
+
+    // volume slider logic (smooth fade)
+    const volumeRange = document.getElementById('volumeRange');
+    let targetVol = volumeRange.value / 100;
+    let currentVol = 0;
+    let fading = null;
+
+    function fadeTo(vol){
+      if(fading) cancelAnimationFrame(fading);
+      targetVol = vol;
+      const step = () => {
+        currentVol += (targetVol - currentVol) * 0.08;
+        if(Math.abs(targetVol - currentVol) < 0.005){
+          currentVol = targetVol;
+        } else {
+          fading = requestAnimationFrame(step);
+        }
+        video.volume = Math.max(0, Math.min(1, currentVol));
+      };
+      step();
+    }
+
+    volumeRange.addEventListener('input',()=>{
+      fadeTo(volumeRange.value / 100);
+    });('click',()=>{
+      const isMuted = targetVol === 0;
+      fadeTo(isMuted ? 0.35 : 0);
+      volumeBtn.style.opacity = isMuted ? 1 : .35;
+    });
 
     // avatar follow
     const avatar = document.querySelector('.avatar');
