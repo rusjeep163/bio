@@ -3,96 +3,179 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Видео фон</title>
+  <title>jeep</title>
+
+  <!-- 💲 Cheаt-style мигающий title -->
+  <script>
+    const base = "jeep";
+    let blink = true;
+    setInterval(() => {
+      document.title = blink ? `$ ${base} $` : `  ${base}  `;
+      blink = !blink;
+    }, 420);
+  </script>
+
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    body, html {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .video-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
-
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.45);
-    }
-
-    .content {
-      position: relative;
-      z-index: 1;
-      height: 100%;
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #111 0%, #000 60%);
+      color: #eaeaea;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
-      color: #fff;
-      text-align: center;
+      overflow: hidden;
+    }
+
+    /* subtle noise */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .profile {
+      position: relative;
+      z-index: 1;
+      width: 360px;
+      padding: 28px 24px 26px;
+      background: rgba(15,15,15,0.75);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      box-shadow: 0 0 25px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.04);
+      animation: fadeUp .8s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: #222 url('avatar.jpg') center/cover no-repeat;
+      box-shadow: 0 0 25px rgba(120,120,255,.35);
     }
 
     h1 {
-      font-size: 3rem;
-      margin-bottom: 15px;
+      font-size: 2.1rem;
+      letter-spacing: .5px;
+      text-align: center;
+      margin-bottom: 6px;
+      text-shadow: 0 0 12px rgba(150,150,255,.35);
     }
 
-    p {
-      font-size: 1.2rem;
-      max-width: 600px;
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin: 10px 0 12px;
     }
 
-    button {
-      margin-top: 25px;
-      padding: 12px 30px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      background: #ffffff;
-      color: #000;
-      transition: 0.3s;
+    .badge {
+      padding: 4px 8px;
+      font-size: .72rem;
+      border-radius: 6px;
+      background: #141414;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 0 8px rgba(0,0,0,.6);
     }
 
-    button:hover {
-      transform: scale(1.05);
-      background: #f0f0f0;
+    .desc {
+      font-size: .9rem;
+      opacity: .85;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .links {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .links a {
+      text-decoration: none;
+      color: #eaeaea;
+      padding: 10px 14px;
+      background: linear-gradient(180deg,#151515,#0e0e0e);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.06);
+      transition: .25s;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+
+    .links a:hover {
+      transform: translateY(-1px) scale(1.015);
+      box-shadow: 0 0 14px rgba(120,120,255,.35);
+      border-color: rgba(140,140,255,.4);
+    }
+
+    .stats {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      font-size: .75rem;
+      opacity: .75;
+    }
+
+    .loading {
+      margin-top: 10px;
+      font-size: .75rem;
+      letter-spacing: 2px;
+      opacity: .6;
+      animation: blinkText 1.2s infinite;
+      text-align: center;
+    }
+
+    @keyframes blinkText {
+      0%,100% { opacity: .3; }
+      50% { opacity: .8; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Видео фон -->
-  <video class="video-bg" autoplay muted loop playsinline>
-    <source src="video.mp4" type="video/mp4">
-    Ваш браузер не поддерживает видео.
-  </video>
+  <div class="profile">
+    <div class="avatar"></div>
 
-  <!-- Затемнение -->
-  <div class="overlay"></div>
+    <h1>jeep</h1>
 
-  <!-- Контент -->
-  <div class="content">
-    <h1>Добро пожаловать</h1>
-    <p>Простой сайт с видео фоном. Можно использовать для лендинга, портфолио или проекта.</p>
-    <button>Начать</button>
+    <div class="badges">
+      <div class="badge">Premium</div>
+    </div>
+
+    <div class="desc"> optimistic kid</div>
+    <div class="desc">Russia, Samara </div>
+
+    <div class="links">
+      <a href="#">Steam</a>
+      <a href="#">Discord</a>
+      <a href="#">VK</a>
+      <a href="#">Telegram</a>
+      
+    </div>
+
+    <div class="stats">
+      <span>Online: 0</span>
+      <span>Views: 679</span>
+    </div>
+
+    <div class="loading">LOADING...</div>
   </div>
 
 </body>
